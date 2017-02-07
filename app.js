@@ -3,16 +3,16 @@
 const app = require('express')();
 const MongoHelper = require('./mongo-helper');
 
-app.get('/', function (req, res) {
+app.get('/', function (req, res, next) {
   let db;
   MongoHelper.connect()
-    .then((result)=>{
-      db = result;
+    .then((connectResult) => {
+      db = connectResult;
       return MongoHelper.insertUserAgent(db, req.get('user-agent'));
-    }).then((result)=>{
+    }).then((insertResult) => {
       return MongoHelper.getUserAgent(db);
-    }).then((result)=>{
-      return res.json(result);
+    }).then((getResult) => {
+      return res.json(getResult);
     }).catch((err) => {
       next(err);
     });
